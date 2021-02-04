@@ -4,69 +4,68 @@ using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
-
-    [Header("Playre Movement")]
-
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float rotationSpeed = 1f;
-    [SerializeField] private float jumpForce = 300f;
-
-    [SerializeField] private Rigidbody rb;
+    [Header("Movement config")]
+    [SerializeField] private CharacterController controller;
+    
+    [Header("Rotation config")]
+    [SerializeField] private float rotationSpeed = 1000;
 
 
-    [Header("Setting pushing")]
+    [Header("References")]
+    [SerializeField] private float speed = 10;
 
-    [SerializeField] private GameObject searchCenter;
-    [SerializeField] private float searchRadius;
-    [SerializeField] private LayerMask searchMask;
-    [SerializeField] private float maxPushForce = 5;
-    [SerializeField] private float pushHeight = 5f;
-    float pushForce;
-    float time;
+    [Header("Gravity")]
+    [SerializeField] private float jumpHeight = 10;  
+    [SerializeField] private float gravityScale = 10;
 
-    private void Update()
+    private float gravity;
+    void Update()
     {
-        if (Input.GetButtonDown("Jump"))
-        {
-            rb.AddForce(Vector3.up * jumpForce);
-        }
+        Rotate();
+        Move();
+    }
 
-        if (Input.GetMouseButton(0))
-        {
-            time += Time.deltaTime;
+    private void Move()
+    {
+        float inputH = Input.GetAxis("Horizontal");
+        float inputV = Input.GetAxis("Vertical");
 
-        }
+        Vector3 moveDirection = transform.forward * inputV + transform.right * inputH;
 
-        if (Input.GetMouseButtonUp(0))
+
+
+
+
+
+
+        if (controller.isGrounded)
         {
-            Collider[] balls = Physics.OverlapSphere(searchCenter.transform.position, searchRadius, searchMask);
-            foreach (Collider coll in balls)
+            gravity = -0.1f;
+            if (Input.GetButtonDown("Jump"))
             {
-                Rigidbody ballRb = coll.GetComponent<Rigidbody>();
-
-                Vector3 forceDirection = transform.forward;
-                forceDirection.y = pushHeight;
-                pushForce = ((1 + Mathf.Sin(time)) / 2) * maxPushForce;
-                ballRb.AddForce(forceDirection.normalized * pushForce, ForceMode.Impulse);
+                gravity = jumpHeight;
             }
         }
+        else
+        {
+            gravity += gravityScale * Physics.gravity.y * Time.deltaTime;
+        }
+
+        if (moveDirection.magnitude > 1)
+        {
+            moveDirection.Normalize();
+        }
+
+
+        moveDirection.y = gravity;
+        controller.Move(moveDirection * speed * Time.deltaTime);
     }
 
-    private void FixedUpdate()
+
+    private void Rotate()
     {
-        float inputHorizontal = Input.GetAxis("Horizontal");
-        float inputVertical = Input.GetAxis("Vertical");
+        float mouseHorizoltal = Input.GetAxis("Mouse X");
 
-        rb.AddForce(transform.forward * inputVertical * speed);
-
-        transform.RotateAround(transform.position, Vector3.up, inputHorizontal * rotationSpeed);
+        transform.Rotate(Vector3.up, mouseHorizoltal * rotationSpeed * Time.deltaTime);
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(searchCenter.transform.position, searchRadius);
-    }
-
 }
-
