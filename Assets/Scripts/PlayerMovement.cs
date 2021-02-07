@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
+
     [Header("Movement config")]
     [SerializeField] private CharacterController controller;
+    Vector3 startPosition;
     
     [Header("Rotation config")]
     [SerializeField] private float rotationSpeed = 1000;
@@ -19,10 +22,25 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravityScale = 10;
 
     private float gravity;
+
+    private void Awake()
+    {
+        startPosition = transform.position;
+        
+    }
+    private void Start()
+    {
+        instance = this;
+    }
     void Update()
     {
         Rotate();
         Move();
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Restart();
+        }
     }
 
     private void Move()
@@ -68,4 +86,9 @@ public class PlayerMovement : MonoBehaviour
 
         transform.Rotate(Vector3.up, mouseHorizoltal * rotationSpeed * Time.deltaTime);
     }
+    public void Restart()
+    {
+        transform.position = startPosition;
+    }
+
 }
