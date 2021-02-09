@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement config")]
     [SerializeField] private CharacterController controller;
     Vector3 startPosition;
+    bool isMove= true;
     
     [Header("Rotation config")]
     [SerializeField] private float rotationSpeed = 1000;
@@ -30,12 +31,21 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Start()
     {
+        if(instance != null)
+        {
+            Destroy(gameObject);
+        }
+
         instance = this;
     }
     void Update()
     {
-        Rotate();
-        Move();
+        if (isMove)
+        {
+            Rotate();
+            Move();
+        }
+        
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -49,10 +59,6 @@ public class PlayerMovement : MonoBehaviour
         float inputV = Input.GetAxis("Vertical");
 
         Vector3 moveDirection = transform.forward * inputV + transform.right * inputH;
-
-
-
-
 
 
 
@@ -83,12 +89,19 @@ public class PlayerMovement : MonoBehaviour
     private void Rotate()
     {
         float mouseHorizoltal = Input.GetAxis("Mouse X");
-
         transform.Rotate(Vector3.up, mouseHorizoltal * rotationSpeed * Time.deltaTime);
     }
     public void Restart()
     {
+        StartCoroutine(StopMove());
         transform.position = startPosition;
+    }
+
+    IEnumerator StopMove()
+    {
+        isMove = false;
+        yield return new WaitForSeconds(.1f);
+        isMove = true;
     }
 
 }

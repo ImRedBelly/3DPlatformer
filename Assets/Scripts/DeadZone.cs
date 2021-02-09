@@ -7,7 +7,7 @@ public class DeadZone : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            SceneManager.LoadScene(0);
+            other.GetComponent<PlayerMovement>().Restart();
         }
     }
 }

@@ -11,7 +11,7 @@ public class FallingPlatform : MonoBehaviour
             StartCoroutine(Falling());
         }
     }
-
+   
     IEnumerator Falling()
     {
         yield return new WaitForSeconds(2);
