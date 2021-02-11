@@ -1,49 +1,22 @@
 ﻿using UnityEngine;
+using DG.Tweening;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 
 public class Button : MonoBehaviour
 {
-    public GameObject door;
-
-    bool isOpen = false;
-
-    private void Update()
-    {
-        if (isOpen)
-        {
-            //door.transform.Translate(new Vector3(0, 1, 0) * Time.deltaTime);
-            //if (door.transform.position.y > 27)
-            //{
-            //    door.transform.position = new Vector3(door.transform.position.x, 27, door.transform.position.z);
-            //}
-            door.transform.DOMoveY(27, 2).SetEase(Ease.InOutElastic);
-        }
-        else
-        {
-            //door.transform.Translate(new Vector3(0, -1, 0) * Time.deltaTime);
-            //if (door.transform.position.y < 20)
-            //{
-            //    door.transform.position = new Vector3(door.transform.position.x, 20, door.transform.position.z);
-            //}
-            door.transform.DOMoveY(20, 5).SetEase(Ease.InElastic);
-        }
-    }
+    public UnityEvent OnPressed;
+    public UnityEvent OnUnPressed;
+   
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            isOpen = true;
-        }
+        OnPressed.Invoke();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            isOpen = false;
-        }
+        OnUnPressed.Invoke();
     }
 
 }
