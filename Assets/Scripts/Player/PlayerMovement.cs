@@ -8,7 +8,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement config")]
     [SerializeField] private CharacterController controller;
-    Vector3 startPosition;
+    public Vector3 startPosition;
+    public Vector3 teleportPoint;
     bool isMove= true;
     
     [Header("Rotation config")]
@@ -96,7 +97,11 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(StopMove());
         transform.position = startPosition;
     }
-
+    public void Teleportation()
+    {
+        StartCoroutine(StopMove());
+        transform.position = teleportPoint;
+    }
     IEnumerator StopMove()
     {
         isMove = false;
