@@ -6,7 +6,7 @@ public class CheckPoint : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.GetComponent<PlayerMovement>().startPosition = transform.position;
+            PlayerMovement.instance.startPosition = transform.position;
         }
     }
 }

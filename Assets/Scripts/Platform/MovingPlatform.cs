@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    private float startPositionPlatform;
-    private float endPositionPlatform;
+    [SerializeField] private float startPositionPlatform;
+    [SerializeField] private float endPositionPlatform;
 
     private float startPositionDoor;
     private float endPositionDoor;
@@ -13,20 +13,15 @@ public class MovingPlatform : MonoBehaviour
 
     private void Start()
     {
-        startPositionPlatform = transform.position.x;
-        endPositionPlatform = startPositionPlatform + step;
+        //startPositionPlatform = transform.position.x;
+        //endPositionPlatform = startPositionPlatform + step;
 
         startPositionDoor = transform.position.y;
         endPositionDoor = startPositionDoor + step;
     }
     public void Flying()
     {
-        Sequence moveSequence = DOTween.Sequence();
-        moveSequence.Append(transform.DOMoveX(endPositionPlatform, 2).SetEase(Ease.Linear));
-
-        moveSequence.Append(transform.DOMoveX(startPositionPlatform, 2).SetEase(Ease.Linear));
-
-        moveSequence.SetLoops(-1);
+        transform.DOLocalMoveX(endPositionPlatform, 3).SetLoops(-1, LoopType.Yoyo).SetUpdate(UpdateType.Fixed);
     }
 
     public void Open()
@@ -43,7 +38,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.transform.SetParent(gameObject.transform, false);
+            other.transform.SetParent(transform);
         }
     }
     private void OnTriggerExit(Collider other)

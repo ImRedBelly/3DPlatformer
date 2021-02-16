@@ -7,8 +7,7 @@ public class Teleport : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.GetComponent<PlayerMovement>().teleportPoint = endPoint.transform.position;
-            other.GetComponent<PlayerMovement>().Teleportation();
+            PlayerMovement.instance.Teleportation(endPoint);
         }
     }
 }

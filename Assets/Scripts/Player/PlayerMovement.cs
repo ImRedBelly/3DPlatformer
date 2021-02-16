@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement config")]
     [SerializeField] private CharacterController controller;
     public Vector3 startPosition;
-    public Vector3 teleportPoint;
     bool isMove= true;
     
     [Header("Rotation config")]
@@ -97,10 +96,10 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(StopMove());
         transform.position = startPosition;
     }
-    public void Teleportation()
+    public void Teleportation(GameObject endPoint)
     {
         StartCoroutine(StopMove());
-        transform.position = teleportPoint;
+        transform.position = endPoint.transform.position;
     }
     IEnumerator StopMove()
     {
