@@ -9,43 +9,42 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement config")]
     [SerializeField] private CharacterController controller;
     public Vector3 startPosition;
-    bool isMove= true;
-    
-    [Header("Rotation config")]
-    [SerializeField] private float rotationSpeed = 1000;
-
+    bool isMove = true;
 
     [Header("References")]
     [SerializeField] private float speed = 10;
 
     [Header("Gravity")]
-    [SerializeField] private float jumpHeight = 10;  
+    [SerializeField] private float jumpHeight = 10;
     [SerializeField] private float gravityScale = 10;
 
     private float gravity;
 
+    public Camera mainCamera;
+
     private void Awake()
     {
         startPosition = transform.position;
-        
     }
+
     private void Start()
     {
-        if(instance != null)
+        if (instance != null)
         {
             Destroy(gameObject);
         }
 
         instance = this;
+
+        mainCamera = Camera.main;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     void Update()
     {
         if (isMove)
-        {
-            Rotate();
             Move();
-        }
-        
+
+
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -58,9 +57,21 @@ public class PlayerMovement : MonoBehaviour
         float inputH = Input.GetAxis("Horizontal");
         float inputV = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection = transform.forward * inputV + transform.right * inputH;
+        Vector3 forward = mainCamera.transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+
+        Vector3 right = mainCamera.transform.right;
+        right.y = 0;
+        right.Normalize();
+
+        Vector3 moveDirection = forward * inputV + right * inputH;
 
 
+        if (Mathf.Abs(inputH) > 0 || Mathf.Abs(inputV) > 0)
+        {
+            transform.rotation = Quaternion.LookRotation(moveDirection);
+        }
 
         if (controller.isGrounded)
         {
@@ -75,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
             gravity += gravityScale * Physics.gravity.y * Time.deltaTime;
         }
 
-        if (moveDirection.magnitude > 1)
+        if (moveDirection.sqrMagnitude > 1)
         {
             moveDirection.Normalize();
         }
@@ -86,11 +97,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    private void Rotate()
-    {
-        float mouseHorizoltal = Input.GetAxis("Mouse X");
-        transform.Rotate(Vector3.up, mouseHorizoltal * rotationSpeed * Time.deltaTime);
-    }
     public void Restart()
     {
         StartCoroutine(StopMove());
@@ -112,6 +118,6 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    
+
 
 }
