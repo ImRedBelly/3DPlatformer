@@ -5,33 +5,20 @@ public class MovingPlatform : MonoBehaviour
 {
     [SerializeField] private float startPositionPlatform;
     [SerializeField] private float endPositionPlatform;
+    [SerializeField] Vector3 endRotateDoor;
 
-    private float startPositionDoor;
-    private float endPositionDoor;
 
-    public float step;
 
-    private void Start()
-    {
-        //startPositionPlatform = transform.position.x;
-        //endPositionPlatform = startPositionPlatform + step;
-
-        startPositionDoor = transform.position.y;
-        endPositionDoor = startPositionDoor + step;
-    }
     public void Flying()
     {
-        transform.DOLocalMoveX(endPositionPlatform, 3).SetLoops(-1, LoopType.Yoyo).SetUpdate(UpdateType.Fixed);
+        transform.DOMoveX(endPositionPlatform, 10).SetLoops(-1, LoopType.Yoyo).SetUpdate(UpdateType.Fixed).SetEase(Ease.Linear);
     }
 
-    public void Open()
+    public void OpenDoor()
     {
-        transform.DOMoveY(endPositionDoor, 3).SetEase(Ease.Linear);
+        transform.DOLocalRotate(endRotateDoor, 10).SetEase(Ease.Linear);
     }
-    public void Closed()
-    {
-        transform.DOMoveY(startPositionDoor, 3).SetEase(Ease.Linear);
-    }
+
 
 
     private void OnTriggerEnter(Collider other)
