@@ -4,21 +4,29 @@ using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //TODO 
+    // сделать смерть
+
     public static PlayerMovement instance;
 
     [Header("Movement config")]
-    [SerializeField] private CharacterController controller;
     public Vector3 startPosition;
     bool isMove = true;
 
     [Header("References")]
     [SerializeField] private float speed = 10;
+    [SerializeField] private float rotationSpeed = 10;
 
     [Header("Gravity")]
     [SerializeField] private float jumpHeight = 10;
     [SerializeField] private float gravityScale = 10;
 
     private float gravity;
+
+
+    [Header("Movement config")]
+    [SerializeField] private CharacterController controller;
+    [SerializeField] private Animator animator;
 
     public Camera mainCamera;
 
@@ -70,7 +78,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (Mathf.Abs(inputH) > 0 || Mathf.Abs(inputV) > 0)
         {
-            transform.rotation = Quaternion.LookRotation(moveDirection);
+            animator.SetBool("Running", true);
+            //transform.rotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), rotationSpeed);
+        }
+        else
+        {
+            animator.SetBool("Running", false);
         }
 
         if (controller.isGrounded)
@@ -89,6 +103,21 @@ public class PlayerMovement : MonoBehaviour
         if (moveDirection.sqrMagnitude > 1)
         {
             moveDirection.Normalize();
+        }
+
+        //bool isJumping = (gravity > 0 || gravity < -0.2f) && !controller.isGrounded;
+        //animator.SetBool("Jump", isJumping);
+        if (gravity > 0)
+        {
+            animator.SetInteger("Gravity", 1);
+        }
+        else if (gravity < -0.1f)
+        {
+            animator.SetInteger("Gravity", -1);
+        }
+        else
+        {
+            animator.SetInteger("Gravity", 0);
         }
 
 
