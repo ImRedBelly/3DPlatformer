@@ -6,6 +6,7 @@ public class HealthPlayer : MonoBehaviour
 {
     public static HealthPlayer Instance { get; private set; }
 
+    public int health = 1;
     private void Awake()
     {
         if (Instance != null)
@@ -17,9 +18,13 @@ public class HealthPlayer : MonoBehaviour
         Instance = this;
     }
 
-  
+
     public void DoDamage()
     {
-        PlayerMovement.instance.Restart();
+        health--;
+        if (health <= 0)
+        {
+            PlayerMovement.instance.Restart();
+        }
     }
 }

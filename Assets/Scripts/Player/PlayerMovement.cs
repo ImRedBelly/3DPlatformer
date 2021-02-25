@@ -52,7 +52,10 @@ public class PlayerMovement : MonoBehaviour
         if (isMove)
             Move();
 
-
+        if (Input.GetMouseButtonDown(0))
+        {
+            Attack();
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -60,6 +63,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    void Attack()
+    {
+        animator.SetTrigger("Attack");
+    }
     private void Move()
     {
         float inputH = Input.GetAxis("Horizontal");
@@ -111,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetInteger("Gravity", 1);
         }
-        else if (gravity < -0.1f)
+        else if (gravity < -0.3f)
         {
             animator.SetInteger("Gravity", -1);
         }
