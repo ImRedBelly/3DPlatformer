@@ -17,7 +17,7 @@ public class Portal : MonoBehaviour
     {
         // Position
         Vector3 lookerPosition = Other.transform.worldToLocalMatrix.MultiplyPoint3x4(Camera.main.transform.position);
-        lookerPosition = new Vector3(-lookerPosition.x, -lookerPosition.y, -lookerPosition.z);
+        lookerPosition = new Vector3(lookerPosition.x, -lookerPosition.y, lookerPosition.z);
         PortalView.transform.localPosition = lookerPosition;
 
         // Rotation
@@ -25,6 +25,8 @@ public class Portal : MonoBehaviour
         PortalView.transform.rotation = difference * Camera.main.transform.rotation;
 
         // Clipping
-        PortalView.nearClipPlane = lookerPosition.magnitude;
+        Vector3 clip = transform.position - PortalView.transform.position;
+        PortalView.nearClipPlane = clip.magnitude;
+
     }
 }
