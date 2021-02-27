@@ -30,6 +30,11 @@ public class PlayerMovement : MonoBehaviour
 
     public Camera mainCamera;
 
+
+    [HideInInspector]
+    public bool canMove = true;
+    public float rotateSpeed = 2.0f;
+    public Transform playerCamera;
     private void Awake()
     {
         startPosition = transform.position;
@@ -45,7 +50,8 @@ public class PlayerMovement : MonoBehaviour
         instance = this;
 
         mainCamera = Camera.main;
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState = CursorLockMode.Locked;
+
     }
     void Update()
     {
@@ -60,6 +66,19 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             Restart();
+        }
+
+
+
+        if (canMove)
+        {
+            transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
+
+            playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+            if (playerCamera.localRotation.eulerAngles.y != 0)
+            {
+                playerCamera.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+            }
         }
     }
 
@@ -87,8 +106,6 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(inputH) > 0 || Mathf.Abs(inputV) > 0)
         {
             animator.SetBool("Running", true);
-            //transform.rotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), rotationSpeed);
         }
         else
         {
@@ -113,8 +130,6 @@ public class PlayerMovement : MonoBehaviour
             moveDirection.Normalize();
         }
 
-        //bool isJumping = (gravity > 0 || gravity < -0.2f) && !controller.isGrounded;
-        //animator.SetBool("Jump", isJumping);
         if (gravity > 0)
         {
             animator.SetInteger("Gravity", 1);
@@ -139,15 +154,14 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(StopMove());
         transform.position = startPosition;
     }
-    public void Teleportation(GameObject endPoint)
+    public void Teleportation()
     {
         StartCoroutine(StopMove());
-        transform.position = endPoint.transform.position;
     }
     IEnumerator StopMove()
     {
         isMove = false;
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.01f);
         isMove = true;
     }
 

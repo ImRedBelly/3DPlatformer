@@ -25,10 +25,10 @@ public class LevelManager : MonoBehaviour
     {
         coinLenght--;
 
-        if (coinLenght <= 0)
-        {
-            teleport.SetActive(true);
-        }
+        //if (coinLenght <= 0)
+        //{
+        //    teleport.SetActive(true);
+        //}
     }
 
 
