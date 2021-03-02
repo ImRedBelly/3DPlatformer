@@ -31,10 +31,10 @@ public class PlayerMovement : MonoBehaviour
     public Camera mainCamera;
 
 
-    [HideInInspector]
-    public bool canMove = true;
-    public float rotateSpeed = 2.0f;
-    public Transform playerCamera;
+    //[HideInInspector]
+    //public bool canMove = true;
+    //public float rotateSpeed = 2.0f;
+    //public Transform playerCamera;
     private void Awake()
     {
         startPosition = transform.position;
@@ -70,16 +70,16 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        if (canMove)
-        {
-            transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
+        //if (canMove)
+        //{
+        //    transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
 
-            playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
-            if (playerCamera.localRotation.eulerAngles.y != 0)
-            {
-                playerCamera.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
-            }
-        }
+        //    playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+        //    if (playerCamera.localRotation.eulerAngles.y != 0)
+        //    {
+        //        playerCamera.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+        //    }
+        //}
     }
 
 
@@ -128,6 +128,12 @@ public class PlayerMovement : MonoBehaviour
         if (moveDirection.sqrMagnitude > 1)
         {
             moveDirection.Normalize();
+        }
+
+        if (Mathf.Abs(inputH) > 0 || Mathf.Abs(inputV) > 0)
+        {
+            animator.SetBool("Running", true);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * rotationSpeed);
         }
 
         if (gravity > 0)

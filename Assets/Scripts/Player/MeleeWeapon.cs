@@ -25,7 +25,9 @@ public class MeleeWeapon : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print("trigger" + other.name);
+
         Damageable damageable = other.GetComponent<Damageable>();
+
         if (damageable != null)
         {
             damageable.DoDamage(damage);
