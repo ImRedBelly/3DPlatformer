@@ -8,7 +8,7 @@ public class PlayerAnimationHelper : MonoBehaviour
     Animator animator;
     private bool checkCombo;
     private bool isAttacking;
-   
+
 
     private void Start()
     {
@@ -21,7 +21,7 @@ public class PlayerAnimationHelper : MonoBehaviour
         {
             return;
         }
-        
+
         if (Input.GetMouseButtonDown(0))
         {
             if (checkCombo)
