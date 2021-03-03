@@ -167,6 +167,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator StopMove()
     {
         isMove = false;
+        
         yield return new WaitForSeconds(.01f);
         isMove = true;
     }

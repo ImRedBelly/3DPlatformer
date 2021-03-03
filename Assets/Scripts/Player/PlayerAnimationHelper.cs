@@ -5,8 +5,11 @@ using UnityEngine;
 public class PlayerAnimationHelper : MonoBehaviour
 {
     [SerializeField] private MeleeWeapon weapon;
-    bool checkCombo;
     Animator animator;
+    private bool checkCombo;
+    private bool isAttacking;
+   
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -14,40 +17,43 @@ public class PlayerAnimationHelper : MonoBehaviour
 
     private void Update()
     {
+        if (isAttacking)
+        {
+            return;
+        }
+        
         if (Input.GetMouseButtonDown(0))
         {
             if (checkCombo)
             {
                 animator.SetTrigger("Attack1");
-
             }
             else
             {
                 animator.SetTrigger("Attack");
-
             }
         }
-
-
     }
-
 
 
     public void MeleeAttackStart()
     {
-        
+        isAttacking = true;
         weapon.AttackStart();
     }
+
     public void MeleeAttackEnd()
     {
+        isAttacking = false;
         weapon.AttackEnd();
         animator.ResetTrigger("Attack");
-
     }
-    void CoboStart()
+
+    public void ComboStart()
     {
         checkCombo = true;
     }
+
     public void ComboEnd()
     {
         checkCombo = false;

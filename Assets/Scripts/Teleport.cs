@@ -8,6 +8,7 @@ public class Teleport : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             PlayerMovement.instance.Teleportation();
+            PlayerMovement.instance.transform.position = endPoint.transform.position;
         }
     }
 }
